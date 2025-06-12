@@ -15,8 +15,8 @@ provider "azurerm" {
 
 # Resource Group
 resource "azurerm_resource_group" "main_rg" {
-  name     = ":markdown-math{single="true" encoded="%7Bvar.student_id%7D"}{var.resource_group_name_suffix}"
-  location = var.location_west_us # Resource group location can be arbitrary, but West US is fine.
+  name     = "${var.student_id}${var.resource_group_name_suffix}"
+  location = var.location_west_us
 
   tags = {
     Project = var.project_tag_value
@@ -181,7 +181,7 @@ resource "azurerm_subnet_network_security_group_association" "vnet1_vm_subnet_ns
 resource "azurerm_windows_virtual_machine" "r1_vm" {
   for_each = toset(["VM1", "VM2"])
 
-  name                = ":markdown-math{single="true" encoded="%7Bvar.student_id%7D-R1-"}{each.key}"
+  name                = "${var.student_id}-R1-${each.key}"
   resource_group_name = azurerm_resource_group.main_rg.name
   location            = var.location_west_us
   size                = var.vm_size
@@ -220,7 +220,7 @@ resource "azurerm_windows_virtual_machine" "r1_vm" {
 resource "azurerm_network_interface" "r1_nic" {
   for_each = toset(["VM1", "VM2"])
 
-  name                = ":markdown-math{single="true" encoded="%7Bvar.student_id%7D-R1-"}{each.key}-nic"
+  name                = "${var.student_id}-R1-${each.key}-nic"
   location            = var.location_west_us
   resource_group_name = azurerm_resource_group.main_rg.name
 
@@ -478,7 +478,7 @@ resource "azurerm_subnet_network_security_group_association" "vnet2_vm_subnet_ns
 resource "azurerm_windows_virtual_machine" "r2_vm" {
   for_each = toset(["VM3", "VM4"])
 
-  name                = ":markdown-math{single="true" encoded="%7Bvar.student_id%7D-R2-"}{each.key}"
+  name                = "${var.student_id}-R2-${each.key}"
   resource_group_name = azurerm_resource_group.main_rg.name
   location            = var.location_west_europe
   size                = var.vm_size
@@ -517,7 +517,7 @@ resource "azurerm_windows_virtual_machine" "r2_vm" {
 resource "azurerm_network_interface" "r2_nic" {
   for_each = toset(["VM3", "VM4"])
 
-  name                = ":markdown-math{single="true" encoded="%7Bvar.student_id%7D-R2-"}{each.key}-nic"
+  name                = "${var.student_id}-R2-${each.key}-nic"
   location            = var.location_west_europe
   resource_group_name = azurerm_resource_group.main_rg.name
 
@@ -614,7 +614,7 @@ resource "azurerm_network_interface" "client_r2_nic" {
 
 # --- Traffic Manager Profile ---
 resource "azurerm_traffic_manager_profile" "main_tm_profile" {
-  name                = ":markdown-math{single="true" encoded="%7Bvar.student_id%7D-"}{var.traffic_manager_dns_prefix}"
+  name                = "${var.student_id}-${var.traffic_manager_dns_prefix}"
   resource_group_name = azurerm_resource_group.main_rg.name
   traffic_routing_method = "Performance" # Route traffic to the closest endpoint
   dns_config {

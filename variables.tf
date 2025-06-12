@@ -8,7 +8,7 @@ variable "student_id" {
 variable "resource_group_name_suffix" {
   description = "Suffix for the resource group name."
   type        = string
-  default     = "-s24-RG"
+  default     = "-p1-rg"
 }
 
 variable "location_west_us" {
